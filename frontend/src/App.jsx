@@ -1,7 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect} from 'react'
+import {vapi, startAssistant, stopAssistant} from "./ai"
 
 function App() {
-
+  useEffect(() => {
+    startAssistant()
+  }, [])
 
   return (
     <>
