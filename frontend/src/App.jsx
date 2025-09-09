@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { vapi, startAssistant, stopAssistant } from "./ai";
+import ActiveCallDetails from "./call/ActiveCallDetails";
 
 function App() {
   //useState stores a value that will be changed
@@ -38,18 +39,18 @@ function App() {
   // sets the event to the target value
   const handleInputChange = (setter) => (event) => {
     setter(event.target.value);
-      };
-  
+  };
+
   const handleStart = async () => {
-    setLoading(true)
-    const data = await startAssistant(firstName, lastName, phoneNumber)
-    setCallId(data.id)
-  }
+    setLoading(true);
+    const data = await startAssistant(firstName, lastName, phoneNumber);
+    setCallId(data.id);
+  };
 
   const handleStop = () => {
-    stopAssistant()
-    // get call details
-  }
+    stopAssistant();
+    // get call details after call ends
+  };
   const showForm = !loading && !started && !loadingResult && !callResult;
   const allFieldsFilled = firstName && lastName && phoneNumber;
 
@@ -90,7 +91,14 @@ function App() {
           )}
         </>
       )}
-      {(loading || loadingResult) && <div className="loading"></div>  }
+      {(loading || loadingResult) && <div className="loading"></div>}
+      {started && (
+        <ActiveCallDetails
+          assistantisSpeaking={assistantIsSpeaking}
+          volumeLevel={volumeLevel}
+          endCallCallBack={handleStop}
+        />
+      )}
     </div>
   );
 }
